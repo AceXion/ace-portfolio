@@ -1,0 +1,387 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Ace Malicay (Copy)</title>
+  <meta name="claude:viewport-fit-sides" content="cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    :root {
+      --bg: #edeff3;
+      --surface: #ffffff;
+      --fg: #15161b;
+      --muted: #565b6a;
+      --line: #d3d7e0;
+      --accent: #d8213f;
+      --accent-fg: #ffffff;
+      --clip-edit: #c9d8f2;
+      --clip-design: #e2d3f0;
+      --clip-publish: #cde8dc;
+      --clip-fg: #15161b;
+      --font-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+      --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0e0f13;
+        --surface: #17181e;
+        --fg: #eceef3;
+        --muted: #9a9fae;
+        --line: #2a2c35;
+        --accent: #ff4d69;
+        --accent-fg: #14050a;
+        --clip-edit: #26365a;
+        --clip-design: #3a2a52;
+        --clip-publish: #1f4034;
+        --clip-fg: #eceef3;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0e0f13;
+      --surface: #17181e;
+      --fg: #eceef3;
+      --muted: #9a9fae;
+      --line: #2a2c35;
+      --accent: #ff4d69;
+      --accent-fg: #14050a;
+      --clip-edit: #26365a;
+      --clip-design: #3a2a52;
+      --clip-publish: #1f4034;
+      --clip-fg: #eceef3;
+      color-scheme: dark;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      padding-left: max(24px, env(safe-area-inset-left, 0px));
+      padding-right: max(24px, env(safe-area-inset-right, 0px));
+      padding-block: 40px 96px;
+    }
+    .wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 112px; }
+    a { color: inherit; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    h1, h2, h3 { font-family: var(--font-display); line-height: 1.05; margin: 0; text-wrap: balance; }
+    p { margin: 0; }
+
+    .mono { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+    .top nav { display: flex; gap: 20px; flex-wrap: wrap; }
+    .top nav a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--muted); }
+    .top nav a:hover { color: var(--fg); }
+    .rec { display: inline-flex; align-items: center; gap: 8px; }
+    .rec::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+
+    .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 64px; align-items: center; }
+    .hero h1 { font-size: clamp(2.8rem, 8vw, 5.6rem); font-weight: 800; letter-spacing: -0.03em; }
+    .hero h1 span { color: var(--accent); }
+    .hero .lede { margin-top: 28px; font-size: 1.15rem; max-width: 34em; color: var(--muted); }
+    .hero .lede strong { color: var(--fg); font-weight: 600; }
+    .cta-row { margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: 6px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--fg); }
+    .btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+    .btn.ghost { background: transparent; color: var(--fg); }
+    .btn:hover { transform: translateY(-1px); }
+
+    .frame { justify-self: center; width: 100%; max-width: 270px; aspect-ratio: 9 / 16; border-radius: 22px; border: 1px solid var(--line); background: linear-gradient(165deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 35%, var(--surface)) 45%, var(--surface) 100%); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 16px; }
+    .frame .tc { font-family: var(--font-mono); font-size: 12px; color: var(--accent-fg); display: flex; justify-content: space-between; }
+    .frame .caption { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+    .frame .caption span { background: var(--fg); color: var(--bg); font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; padding: 4px 10px; border-radius: 4px; }
+    .frame .safe { position: absolute; inset: 14% 8% 22% 8%; border: 1px dashed color-mix(in srgb, var(--accent-fg) 55%, transparent); border-radius: 8px; pointer-events: none; }
+
+    .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 36px; }
+    .sec-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; letter-spacing: -0.02em; }
+
+    .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; }
+    .about p { max-width: 36em; }
+    .about p + p { margin-top: 18px; }
+    .roles { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+    .roles li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 4px 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .roles b { font-family: var(--font-display); font-size: 1.05rem; }
+    .roles span { color: var(--muted); font-size: 15px; }
+    .facts { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 18px 20px; align-content: start; font-size: 15px; }
+    .facts dt { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+    .facts dd { margin: 0; }
+
+    .timeline { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 28px 24px; position: relative; overflow: hidden; }
+    .ruler { height: 22px; margin-left: 88px; border-bottom: 1px solid var(--line); background: repeating-linear-gradient(to right, var(--line) 0, var(--line) 1px, transparent 1px, transparent 12.5%); position: relative; }
+    .ruler span { position: absolute; top: 2px; font-family: var(--font-mono); font-size: 10px; color: var(--muted); transform: translateX(4px); }
+    .track { display: grid; grid-template-columns: 88px minmax(0, 1fr); align-items: center; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .track:last-of-type { border-bottom: 0; }
+    .track .label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: var(--muted); }
+    .clips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+    .clip { padding: 13px 18px; border-radius: 5px; font-weight: 600; font-size: 14px; color: var(--clip-fg); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .clip small { font-weight: 400; font-size: 12px; opacity: 0.8; }
+    .clip.edit { background: var(--clip-edit); }
+    .clip.design { background: var(--clip-design); }
+    .clip.publish { background: var(--clip-publish); }
+    .playhead { position: absolute; top: 28px; bottom: 28px; left: calc(24px + 88px + 38%); width: 2px; background: var(--accent); pointer-events: none; }
+    .playhead::before { content: ""; position: absolute; top: -2px; left: -5px; width: 12px; height: 12px; background: var(--accent); clip-path: polygon(0 0, 100% 0, 50% 100%); }
+    @media (prefers-reduced-motion: no-preference) {
+      .playhead { animation: sweep 1.6s cubic-bezier(.2,.7,.2,1) 0.2s both; }
+      @keyframes sweep { from { left: calc(24px + 88px); } to { left: calc(24px + 88px + 38%); } }
+    }
+
+    .rows { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+    .row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 8px 32px; padding: 30px 0; border-bottom: 1px solid var(--line); }
+    .row h3 { font-size: 1.35rem; font-weight: 700; }
+    .row p { color: var(--muted); max-width: 40em; }
+    .tag { display: inline-block; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 8px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); }
+
+    .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .link { display: flex; flex-direction: column; gap: 8px; padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; text-decoration: none; min-width: 0; }
+    .link:hover { border-color: var(--accent); }
+    .link b { font-family: var(--font-display); font-size: 1.15rem; }
+    .link span { color: var(--muted); font-size: 14px; }
+    .link .go { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-top: 4px; }
+
+    .cover { --p: 0; position: relative; aspect-ratio: 16 / 10; width: 100%; border-radius: 8px; overflow: hidden; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); }
+    .link:is(:hover, :focus-visible) .cover { --p: 1; }
+    @media (hover: none) { .cover { --p: 1; } }
+    @media (prefers-reduced-motion: reduce) { .cover * { transition: none !important; } }
+    .cover > span { display: block; }
+
+    .cover.video { background: var(--clip-edit); gap: 10px; }
+    .cover .fr { height: 74%; aspect-ratio: 9 / 16; border-radius: 6px; position: relative; flex: none; transform: translateY(calc((1 - var(--p)) * 24%)); opacity: calc(0.5 + var(--p) * 0.5); transition: transform 0.45s ease, opacity 0.45s ease; }
+    .cover .fr:nth-child(1) { background: linear-gradient(160deg, var(--accent), var(--surface)); }
+    .cover .fr:nth-child(2) { background: linear-gradient(160deg, var(--clip-design), var(--surface)); transition-delay: 60ms; }
+    .cover .fr:nth-child(3) { background: linear-gradient(160deg, var(--surface), var(--accent)); transition-delay: 120ms; }
+    .cover .fr::after { content: attr(data-tc); position: absolute; left: 5px; bottom: 4px; font-family: var(--font-mono); font-size: 9px; color: var(--fg); }
+    .cover .ph { position: absolute; top: 8%; bottom: 8%; width: 2px; background: var(--accent); left: calc(14% + var(--p) * 72%); transition: left 0.9s cubic-bezier(.2,.7,.2,1); }
+
+    .cover.design { background: var(--clip-design); }
+    .cover .grid4 { height: 78%; aspect-ratio: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cover .tile { border-radius: 6px; position: relative; transform: scale(calc(0.86 + var(--p) * 0.14)) rotate(calc(var(--p) * var(--r))); transition: transform 0.45s ease; }
+    .cover .tile::after { content: ""; position: absolute; left: 8px; bottom: 8px; width: 46%; height: 5px; border-radius: 3px; background: var(--fg); opacity: 0.35; }
+    .cover .tile:nth-child(1) { --r: -4deg; background: var(--accent); }
+    .cover .tile:nth-child(2) { --r: 3deg; background: var(--surface); }
+    .cover .tile:nth-child(3) { --r: 3deg; background: var(--clip-edit); }
+    .cover .tile:nth-child(4) { --r: -4deg; background: var(--clip-publish); }
+
+    .cover.chat { background: var(--clip-publish); flex-direction: column; justify-content: center; gap: 9px; padding: 0 12%; align-items: stretch; }
+    .cover .bub { height: 22px; border-radius: 12px; transform: translateY(calc((1 - var(--p)) * 14px)); opacity: calc(0.35 + var(--p) * 0.65); transition: transform 0.4s ease, opacity 0.4s ease; }
+    .cover .bub.l { align-self: flex-start; width: 62%; background: var(--surface); }
+    .cover .bub.r { align-self: flex-end; width: 48%; background: var(--accent); transition-delay: 90ms; }
+    .cover .bub.s { width: 38%; transition-delay: 180ms; }
+
+    .cover.stack { background: var(--bg); }
+    .cover .sheet { position: absolute; top: 14%; left: 31%; width: 38%; height: 72%; border-radius: 6px; border: 1px solid var(--line); transform: translateX(calc(var(--p) * var(--x))) rotate(calc(var(--p) * var(--r))); transition: transform 0.5s cubic-bezier(.2,.7,.2,1); }
+    .cover .sheet:nth-child(1) { --x: -30%; --r: -9deg; background: var(--clip-edit); }
+    .cover .sheet:nth-child(2) { --x: 0%; --r: 0deg; background: var(--clip-design); }
+    .cover .sheet:nth-child(3) { --x: 30%; --r: 9deg; background: var(--clip-publish); }
+    .cover .sheet:nth-child(2) { z-index: 1; }
+
+    .contact { background: var(--fg); color: var(--bg); border-radius: 14px; padding: clamp(32px, 6vw, 72px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; }
+    .contact h2 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em; }
+    .contact p { opacity: 0.8; margin-top: 12px; }
+    .contact-list { display: flex; flex-direction: column; gap: 22px; justify-content: center; min-width: 0; }
+    .contact-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid color-mix(in srgb, var(--bg) 25%, transparent); min-width: 0; }
+    .contact-item div { min-width: 0; }
+    .contact-item .mono { color: inherit; opacity: 0.65; display: block; }
+    .contact-item .val { font-size: 1.05rem; font-weight: 500; overflow-wrap: anywhere; user-select: all; }
+    .copy { flex: none; background: transparent; color: inherit; border: 1px solid color-mix(in srgb, var(--bg) 45%, transparent); border-radius: 6px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+    .copy:hover { border-color: var(--accent); }
+
+    footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+    @media (max-width: 760px) {
+      .hero, .about, .contact { grid-template-columns: minmax(0, 1fr); }
+      .frame { max-width: 220px; justify-self: start; }
+      .row { grid-template-columns: minmax(0, 1fr); }
+      .track { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+      .ruler { margin-left: 0; }
+      .playhead { display: none; }
+      .facts { grid-template-columns: 90px minmax(0, 1fr); }
+      .roles li { grid-template-columns: minmax(0, 1fr); }
+      .wrap { gap: 88px; }
+      .hero, .about { gap: 44px; }
+      .timeline { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <span class="mono rec">Ace Malicay · PH</span>
+      <nav aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#toolkit">Toolkit</a>
+        <a href="#experience">Experience</a>
+        <a href="#work">Work</a>
+        <a href="#accounts">Channels</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="name">
+      <div>
+        <p class="mono">Social media management</p>
+        <h1 id="name" style="margin-top:18px">Ace <span>Malicay</span></h1>
+        <p class="lede">I plan, publish and manage content for <strong>TikTok, Instagram and Facebook</strong>, and look after the community that grows around it. I'm an IT student who learns fast and works well with direction from a senior team.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="https://drive.google.com/file/d/1oJzMh781wSE9JlAtcrK--KszDIiAux4K/view?usp=sharing" target="_blank" rel="noopener">Open portfolio file</a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <div class="frame" role="img" aria-label="Vertical 9 by 16 video frame with a timecode and caption">
+        <div class="tc"><span>● REC</span><span>00:00:15</span></div>
+        <div class="safe"></div>
+        <div class="caption">
+          <span>Hook in 3 seconds.</span>
+          <span>Captions on.</span>
+          <span>Post on time.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-h">
+      <div>
+        <div class="sec-head" style="margin-bottom:22px"><h2 id="about-h">About</h2></div>
+        <p>I manage social media from the first idea to the scheduled post, and I have moderated and managed online communities, which taught me how to talk to an audience that talks back.</p>
+        <p>My work so far has been creator and community work, not a formal social media manager job. I'm looking for a team where I can apply it, take feedback and grow into the role.</p>
+        <ul class="roles" aria-label="What else I bring">
+          <li><b>Video editor</b><span>Transition edits and short videos, made in CapCut and After Effects.</span></li>
+          <li><b>Graphic designer</b><span>Post graphics, covers and templates, made in Photoshop and Canva.</span></li>
+          <li><b>Content creator</b><span>Transition videos for TikTok and aesthetic streetwear and fashion content for Instagram.</span></li>
+        </ul>
+      </div>
+      <dl class="facts">
+        <dt>Studying</dt><dd>BS Information Technology, Systems Technology Institute College, expected 2028</dd>
+        <dt>Languages</dt><dd>English (proficient), Filipino (native), Cebuano (native)</dd>
+        <dt>Platforms</dt><dd>TikTok, Instagram, YouTube, Facebook</dd>
+        <dt>Location</dt><dd>PH, working remotely</dd>
+      </dl>
+    </section>
+
+    <section id="toolkit" aria-labelledby="toolkit-h">
+      <div class="sec-head">
+        <h2 id="toolkit-h">Toolkit</h2>
+        <span class="mono">Laid out like a timeline</span>
+      </div>
+      <div class="timeline">
+        <div class="ruler" aria-hidden="true"><span style="left:0">0:00</span><span style="left:25%">0:05</span><span style="left:50%">0:10</span><span style="left:75%">0:15</span></div>
+        <div class="track">
+          <span class="label">V1 · EDIT</span>
+          <div class="clips">
+            <div class="clip edit">CapCut<small>Video edits</small></div>
+            <div class="clip edit">Adobe After Effects<small>Motion and effects</small></div>
+          </div>
+        </div>
+        <div class="track">
+          <span class="label">V2 · DESIGN</span>
+          <div class="clips">
+            <div class="clip design">Adobe Photoshop<small>Graphics and covers</small></div>
+            <div class="clip design">Canva<small>Posts and templates</small></div>
+          </div>
+        </div>
+        <div class="track">
+          <span class="label">A1 · PUBLISH</span>
+          <div class="clips">
+            <div class="clip publish">Meta Business Suite<small>Scheduling and pages</small></div>
+            <div class="clip publish">Notion<small>Content planning</small></div>
+          </div>
+        </div>
+        <div class="playhead" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section id="experience" aria-labelledby="exp-h">
+      <div class="sec-head"><h2 id="exp-h">Experience</h2></div>
+      <div class="rows">
+        <article class="row">
+          <h3>Ascendora</h3>
+          <div><p>Community management and moderation, plus content creation.</p><span class="tag">Not currently active</span></div>
+        </article>
+        <article class="row">
+          <h3>xComunicado</h3>
+          <div><p>Community management and moderation, plus content creation.</p><span class="tag">Not currently active</span></div>
+        </article>
+        <article class="row">
+          <h3>The Elites Vault</h3>
+          <div><p>Community management and moderation, plus content creation.</p><span class="tag">Not currently active</span></div>
+        </article>
+        <article class="row">
+          <h3>TICKR Capital</h3>
+          <div><p>Managed the Facebook page as a volunteer.</p><span class="tag">Volunteer</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="work" aria-labelledby="work-h">
+      <div class="sec-head">
+        <h2 id="work-h">Work</h2>
+        <span class="mono">Hover for a preview · opens in a new tab</span>
+      </div>
+      <div class="links">
+        <a class="link" href="https://drive.google.com/drive/folders/1rqGz-0Fhh-0NECGLq1nfr2eY0QZ3BWIf?usp=sharing" target="_blank" rel="noopener"><div class="cover video" aria-hidden="true"><span class="fr" data-tc="0:03"></span><span class="fr" data-tc="0:09"></span><span class="fr" data-tc="0:15"></span><span class="ph"></span></div><b>Video edits</b><span>Transition edits and other video work.</span><span class="go">Google Drive →</span></a>
+        <a class="link" href="https://drive.google.com/drive/folders/1URuq_4tKXTbhzkhw1RtssJi9MVTIEwqO?usp=sharing" target="_blank" rel="noopener"><div class="cover design" aria-hidden="true"><div class="grid4"><span class="tile"></span><span class="tile"></span><span class="tile"></span><span class="tile"></span></div></div><b>Graphic design</b><span>Post graphics, covers and templates.</span><span class="go">Google Drive →</span></a>
+        <a class="link" href="https://drive.google.com/drive/folders/1LllUb0pSRxH1sVIadIk78mAWZnMiFmXf?usp=sharing" target="_blank" rel="noopener"><div class="cover chat" aria-hidden="true"><span class="bub l"></span><span class="bub r"></span><span class="bub l s"></span></div><b>Community management</b><span>Moderation and community work.</span><span class="go">Google Drive →</span></a>
+        <a class="link" href="https://drive.google.com/drive/folders/1TZ0TC8Z696ZQDO4MW6Pc2rgQLxV1WWUE?usp=sharing" target="_blank" rel="noopener"><div class="cover stack" aria-hidden="true"><span class="sheet"></span><span class="sheet"></span><span class="sheet"></span></div><b>Full work</b><span>Everything I've made in one folder.</span><span class="go">Google Drive →</span></a>
+      </div>
+    </section>
+
+    <section id="accounts" aria-labelledby="accounts-h">
+      <div class="sec-head">
+        <h2 id="accounts-h">Channels I run</h2>
+        <span class="mono">Opens in a new tab</span>
+      </div>
+      <div class="links">
+        <a class="link" href="https://www.tiktok.com/@acexion_" target="_blank" rel="noopener"><b>TikTok</b><span>Transition edits.</span><span class="go">@acexion_ →</span></a>
+        <a class="link" href="https://www.instagram.com/xion_.a/" target="_blank" rel="noopener"><b>Instagram</b><span>Aesthetic streetwear and fashion content.</span><span class="go">@xion_.a →</span></a>
+        <a class="link" href="https://www.facebook.com/TICKR.Capital" target="_blank" rel="noopener"><b>Facebook</b><span>The TICKR Capital page I managed.</span><span class="go">TICKR Capital →</span></a>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-h">
+      <div>
+        <h2 id="contact-h">Let's work together.</h2>
+        <p>Send me a role, a brief or a test edit. I reply to every message.</p>
+      </div>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div><span class="mono">Email</span><span class="val" id="email-val">acemalicay.work@gmail.com</span></div>
+          <button class="copy" type="button" data-copy="acemalicay.work@gmail.com" id="copy-email">Copy</button>
+        </div>
+        <div class="contact-item">
+          <div><span class="mono">Phone</span><span class="val" id="phone-val">+63 976 151 3968</span></div>
+          <button class="copy" type="button" data-copy="+639761513968" id="copy-phone">Copy</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span class="mono">Ace Malicay</span>
+      <span class="mono">Open to remote roles</span>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('.copy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.getAttribute('data-copy');
+        var done = function () { var old = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = old; }, 1400); };
+        var fallback = function () {
+          var el = btn.parentElement.querySelector('.val');
+          var r = document.createRange(); r.selectNodeContents(el);
+          var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+          btn.textContent = 'Selected';
+          setTimeout(function () { btn.textContent = 'Copy'; }, 1400);
+        };
+        try {
+          navigator.clipboard.writeText(text).then(done, fallback);
+        } catch (e) { fallback(); }
+      });
+    });
+  </script>
+</body>
+</html>
